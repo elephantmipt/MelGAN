@@ -13,9 +13,9 @@ def create_dataloader(hp, args, train):
     if train:
         return DataLoader(dataset=dataset, batch_size=hp.train.batch_size, shuffle=True,
                           num_workers=hp.train.num_workers, pin_memory=True, drop_last=True)
-    else:
-        return DataLoader(dataset=dataset, batch_size=1, shuffle=False,
-                          num_workers=hp.train.num_workers, pin_memory=True, drop_last=False)
+
+    return DataLoader(dataset=dataset, batch_size=1, shuffle=False,
+                      num_workers=hp.train.num_workers, pin_memory=True, drop_last=False)
 
 
 class MelFromDisk(Dataset):
@@ -36,8 +36,8 @@ class MelFromDisk(Dataset):
             idx1 = idx
             idx2 = self.mapping[idx1]
             return self.my_getitem(idx1), self.my_getitem(idx2)
-        else:
-            return self.my_getitem(idx)
+
+        return self.my_getitem(idx)
 
     def shuffle_mapping(self):
         random.shuffle(self.mapping)
