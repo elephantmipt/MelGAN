@@ -12,10 +12,10 @@ def create_dataloader(hp, args, train):
 
     if train:
         return DataLoader(dataset=dataset, batch_size=hp.train.batch_size, shuffle=True,
-            num_workers=hp.train.num_workers, pin_memory=True, drop_last=True)
+                          num_workers=hp.train.num_workers, pin_memory=True, drop_last=True)
     else:
         return DataLoader(dataset=dataset, batch_size=1, shuffle=False,
-            num_workers=hp.train.num_workers, pin_memory=True, drop_last=False)
+                          num_workers=hp.train.num_workers, pin_memory=True, drop_last=False)
 
 
 class MelFromDisk(Dataset):
@@ -47,8 +47,8 @@ class MelFromDisk(Dataset):
         melpath = wavpath.replace('.wav', '.mel')
         sr, audio = read_wav_np(wavpath)
         if len(audio) < self.hp.audio.segment_length + self.hp.audio.pad_short:
-            audio = np.pad(audio, (0, self.hp.audio.segment_length + self.hp.audio.pad_short - len(audio)), \
-                    mode='constant', constant_values=0.0)
+            audio = np.pad(audio, (0, self.hp.audio.segment_length + self.hp.audio.pad_short - len(audio)),
+                           mode='constant', constant_values=0.0)
 
         audio = torch.from_numpy(audio).unsqueeze(0)
         mel = torch.load(melpath).squeeze(0)
@@ -60,7 +60,7 @@ class MelFromDisk(Dataset):
             mel = mel[:, mel_start:mel_end]
 
             audio_start = mel_start * self.hp.audio.hop_length
-            audio = audio[:, audio_start:audio_start+self.hp.audio.segment_length]
+            audio = audio[:, audio_start:audio_start + self.hp.audio.segment_length]
 
-        audio = audio + (1/32768) * torch.randn_like(audio)
+        audio = audio + (1 / 32768) * torch.randn_like(audio)
         return mel, audio

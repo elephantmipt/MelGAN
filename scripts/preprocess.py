@@ -10,13 +10,7 @@ from src.utils import read_wav_np
 
 
 def main(hp, args):
-    stft = TacotronSTFT(filter_length=hp.audio.filter_length,
-                        hop_length=hp.audio.hop_length,
-                        win_length=hp.audio.win_length,
-                        n_mel_channels=hp.audio.n_mel_channels,
-                        sampling_rate=hp.audio.sampling_rate,
-                        mel_fmin=hp.audio.mel_fmin,
-                        mel_fmax=hp.audio.mel_fmax)
+    stft = TacotronSTFT()
 
     wav_files = glob.glob(os.path.join(args.data_path, '**', '*.wav'), recursive=True)
 
@@ -39,11 +33,8 @@ def main(hp, args):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('-c', '--config', type=str, required=True,
-                        help="yaml file for config.")
     parser.add_argument('-d', '--data_path', type=str, required=True,
                         help="root directory of wav files")
     args = parser.parse_args()
-    hp = HParam(args.config)  # @TODO to be refactored
 
     main(hp, args)
