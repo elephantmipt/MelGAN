@@ -19,7 +19,7 @@ jobs:
           python -m pip install --upgrade pip
           conda install -c conda-forge librosa -y  # dirty hack here
           pip install -r requirements/requirements.txt -r requirements/requirements-dev.txt
-          sudo apt-get install libsndfile1
+          sudo apt-get install libsndfile1 -y
       - name: Preprocess audio
         run: |
           export PYTHONPATH=$PYTHONPATH:.
