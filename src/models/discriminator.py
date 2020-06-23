@@ -76,7 +76,8 @@ class DiscriminatorBlock(nn.Module):
         output_dict = {}
         for key, layer in self.layers:
             features = layer(features)
-            output_dict[key.concat("_ouput")] = features
+            if "output" not in key:
+                output_dict[key.concat("_ouput")] = features
 
         score = features
         return {"features": output_dict, "score": score}
