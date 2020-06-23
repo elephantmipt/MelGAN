@@ -17,9 +17,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          conda install -c conda-forge librosa -y  # dirty hack here
           pip install -r requirements/requirements.txt -r requirements/requirements-dev.txt
-          pip uninstall librosa -y  # dirty hack here
-          conda install -c conda-forge librosa
       - name: Preprocess audio
         run: |
           export PYTHONPATH=$PYTHONPATH:.
