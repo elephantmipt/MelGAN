@@ -33,13 +33,13 @@ def create_dataloader(hp, args, train):
 
 class MelFromDisk(Dataset):
     def __init__(
-            self,
-            path: str,
-            segment_length: int = 16000,
-            pad_short: int = 2000,
-            filter_length: int = 1024,
-            hop_length: int = 256,
-            train: bool = True
+        self,
+        path: str,
+        segment_length: int = 16000,
+        pad_short: int = 2000,
+        filter_length: int = 1024,
+        hop_length: int = 256,
+        train: bool = True,
     ):
 
         self.train = train
@@ -51,9 +51,7 @@ class MelFromDisk(Dataset):
         self.wav_list = glob.glob(
             os.path.join(self.path, "**", "*.wav"), recursive=True
         )
-        self.mel_segment_length = (
-                self.segment_length // self.hop_length + 2
-        )
+        self.mel_segment_length = self.segment_length // self.hop_length + 2
         self.mapping = [i for i in range(len(self.wav_list))]
 
     def __len__(self):
@@ -83,12 +81,7 @@ class MelFromDisk(Dataset):
         if len(audio) < self.segment_length + self.pad_short:
             audio = np.pad(
                 audio,
-                (
-                    0,
-                    self.segment_length
-                    + self.pad_short
-                    - len(audio),
-                ),
+                (0, self.segment_length + self.pad_short - len(audio),),
                 mode="constant",
                 constant_values=0.0,
             )
@@ -103,9 +96,7 @@ class MelFromDisk(Dataset):
             mel = mel[:, mel_start:mel_end]
 
             audio_start = mel_start * self.hop_length
-            audio = audio[
-                    :, audio_start: audio_start + self.segment_length
-                    ]
+            audio = audio[:, audio_start : audio_start + self.segment_length]
 
         audio = audio + (1 / 32768) * torch.randn_like(audio)
         return {

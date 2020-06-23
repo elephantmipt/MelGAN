@@ -35,7 +35,8 @@ class GeneratorLossCallback(dl.MetricCallback):
                 torch.sum(torch.pow(score_fake - 1.0, 2), dim=[1, 2])
             )
             for features_fake, features_real in zip(
-                disc_out_fake["features"].values(), disc_out_real["features"].values()
+                disc_out_fake["features"].values(),
+                disc_out_real["features"].values(),
             ):
                 loss += (
                     0.33

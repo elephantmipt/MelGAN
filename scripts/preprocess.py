@@ -51,19 +51,12 @@ if __name__ == "__main__":
         "--segment-length",
         type=int,
         default=16000,
-        help="audio segment length for training"
+        help="audio segment length for training",
     )
     parser.add_argument(
-        "--sampling-rate",
-        type=int,
-        default=22050,
-        help="audio rate"
+        "--sampling-rate", type=int, default=22050, help="audio rate"
     )
-    parser.add_argument(
-        "--pad-short",
-        type=int,
-        default=2000
-    )
+    parser.add_argument("--pad-short", type=int, default=2000)
     args = parser.parse_args()
 
     main(args)
