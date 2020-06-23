@@ -1,0 +1,2 @@
+pytest
+catalyst-codestyle==20.4
