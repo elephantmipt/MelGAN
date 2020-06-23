@@ -49,15 +49,15 @@ class DiscriminatorBlock(nn.Module):
 
         layers[f"conv_layer_{downsampling_layers_num+1}"] = nn.Sequential(
             nn.Conv1d(
-                in_channels=current_feature_dim,
-                out_channels=current_feature_dim * 2,
+                in_channels=min(current_feature_dim, 1024),
+                out_channels=min(current_feature_dim * 2, 1024),
                 kernel_size=5,
                 padding=2,
             ),
             nn.ReLU(),
         )
         layers["output_layer"] = nn.Conv1d(
-            in_channels=current_feature_dim * 2,
+            in_channels=min(current_feature_dim * 2, 1024),
             out_channels=1,
             kernel_size=3,
             padding=1,
@@ -74,10 +74,10 @@ class DiscriminatorBlock(nn.Module):
         padded = self.layers["input_padding"](inp)
         features = padded
         output_dict = {}
-        for key, layer in self.layers:
+        for key, layer in self.layers.items():
             features = layer(features)
             if "output" not in key:
-                output_dict[key.concat("_ouput")] = features
+                output_dict[key + "_ouput"] = features
 
         score = features
         return {"features": output_dict, "score": score}
@@ -121,7 +121,7 @@ class Discriminator(nn.Module):
             Dict with all discriminators output
         """
         output_dict = {}
-        for name, desc in self.discriminators:
+        for name, desc in self.discriminators.items():
             output_dict[name + "_output"] = desc(inp)
             inp = self.downsampler(inp)
         return output_dict

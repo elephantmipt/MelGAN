@@ -17,11 +17,12 @@ class DiscriminatorLossCallback(dl.MetricCallback):
             prefix=prefix,
             metric_fn=self._loss,
             output_key=output_key,
+            input_key="discriminator_segment_len",
             multiplier=multiplier,
         )
         self.feature_weight = feature_weight
 
-    def _loss(self, output: Dict[str, Any]):
+    def _loss(self, output: Dict[str, Any], *args, **kwargs):
         real_d = output["real"]
         fake_d = output["fake"]
         loss = 0.0

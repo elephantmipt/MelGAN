@@ -9,7 +9,7 @@ import torch
 import tqdm
 
 
-def main(hp, args):
+def main(args):
     stft = TacotronSTFT()
 
     wav_files = glob.glob(
@@ -18,15 +18,15 @@ def main(hp, args):
 
     for wavpath in tqdm.tqdm(wav_files, desc="preprocess wav to mel"):
         sr, wav = read_wav_np(wavpath)
-        assert sr == hp.audio.sampling_rate, (
+        assert sr == args.sampling_rate, (
             "sample rate mismatch. expected %d, got %d at %s"
-            % (hp.audio.sampling_rate, sr, wavpath)
+            % (args.sampling_rate, sr, wavpath)
         )
 
-        if len(wav) < hp.audio.segment_length + hp.audio.pad_short:
+        if len(wav) < args.segment_length + args.pad_short:
             wav = np.pad(
                 wav,
-                (0, hp.audio.segment_length + hp.audio.pad_short - len(wav)),
+                (0, args.segment_length + args.pad_short - len(wav)),
                 mode="constant",
                 constant_values=0.0,
             )
@@ -42,11 +42,28 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument(
         "-d",
-        "--data_path",
+        "--data-path",
         type=str,
         required=True,
         help="root directory of wav files",
     )
+    parser.add_argument(
+        "--segment-length",
+        type=int,
+        default=16000,
+        help="audio segment length for training"
+    )
+    parser.add_argument(
+        "--sampling-rate",
+        type=int,
+        default=22050,
+        help="audio rate"
+    )
+    parser.add_argument(
+        "--pad-short",
+        type=int,
+        default=2000
+    )
     args = parser.parse_args()
 
-    main(hp, args)
+    main(args)

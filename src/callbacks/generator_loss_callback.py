@@ -17,11 +17,12 @@ class GeneratorLossCallback(dl.MetricCallback):
             prefix=prefix,
             metric_fn=self._loss,
             output_key=output_key,
+            input_key="generator_segment_len",
             multiplier=multiplier,
         )
         self.feature_weight = feature_weight
 
-    def _loss(self, output: Dict[str, Any]):
+    def _loss(self, output: Dict[str, Any], *args, **kwargs):
         real_d = output["real"]
         fake_d = output["fake"]
         loss = 0.0
@@ -34,7 +35,7 @@ class GeneratorLossCallback(dl.MetricCallback):
                 torch.sum(torch.pow(score_fake - 1.0, 2), dim=[1, 2])
             )
             for features_fake, features_real in zip(
-                disc_out_fake.values(), disc_out_real.values()
+                disc_out_fake["features"].values(), disc_out_real["features"].values()
             ):
                 loss += (
                     0.33

@@ -37,7 +37,7 @@ class ResidualBlock(nn.Module):
 
 
 class Generator(nn.Module):
-    def __init__(self, inp_channels: int, normalization: bool = True):
+    def __init__(self, inp_channels: int = 80, normalization: bool = True):
         """
         @TODO
         Args:
