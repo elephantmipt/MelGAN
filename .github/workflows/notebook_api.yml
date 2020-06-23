@@ -26,4 +26,5 @@ jobs:
           python scripts/preprocess.py -d data/test
       - name: Run tests
         run: |
+          export PYTHONPATH=$PYTHONPATH:.
           pytest .
