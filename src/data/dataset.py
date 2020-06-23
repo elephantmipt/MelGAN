@@ -35,7 +35,10 @@ class MelFromDisk(Dataset):
         if self.train:
             idx1 = idx
             idx2 = self.mapping[idx1]
-            return self.my_getitem(idx1), self.my_getitem(idx2)
+            return {
+                "generator": self.my_getitem(idx1),
+                "discriminator": self.my_getitem(idx2)
+            }
 
         return self.my_getitem(idx)
 
@@ -63,4 +66,4 @@ class MelFromDisk(Dataset):
             audio = audio[:, audio_start:audio_start + self.hp.audio.segment_length]
 
         audio = audio + (1 / 32768) * torch.randn_like(audio)
-        return mel, audio
+        return {"mel": mel, "audio": audio, "seg_len": self.hp.audio.segment_length}

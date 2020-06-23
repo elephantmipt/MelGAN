@@ -75,9 +75,11 @@ class DiscriminatorBlock(nn.Module):
         features = padded
         output_dict = {}
         for key, layer in self.layers:
-            output_dict[key.concat("_ouput")] = features
             features = layer(features)
-        return output_dict
+            output_dict[key.concat("_ouput")] = features
+
+        score = features
+        return {"features": output_dict, "score": score}
 
 
 class Discriminator(nn.Module):
@@ -103,7 +105,7 @@ class Discriminator(nn.Module):
         )
         self.discriminators = nn.ModuleDict()
         for idx in range(discriminator_number):
-            self.discriminators[f"desc_{idx}"] = DiscriminatorBlock(
+            self.discriminators[f"disc_{idx}"] = DiscriminatorBlock(
                 downsampling_factor=downsampling_factor,
             )
 
