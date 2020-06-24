@@ -25,4 +25,5 @@ class Experiment(ConfigExperiment):
             path = "data/LJDpeech-1.1/wavs"  # you can use bin script
             # to download this dataset
         train_dataset = MelFromDisk(path)
+        train_dataset.shuffle_mapping()
         return OrderedDict({"train": train_dataset})

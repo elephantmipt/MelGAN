@@ -85,6 +85,7 @@ class Generator(nn.Module):
         Returns:
             generator output
         """
+        inp = (inp + 5.0) / 5.0 # roughly normalize spectrogram
         for _name, layer in self.layers.items():
             inp = layer(inp)
         return inp
