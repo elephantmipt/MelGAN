@@ -21,11 +21,20 @@ class DiscriminatorLossCallback(dl.MetricCallback):
             multiplier=multiplier,
         )
         self.feature_weight = feature_weight
-
+        
+    
+    def _process_disc_output(self, disc_output: List[List[torch.Tensor]]):
+        output_dict = {}
+        for disc_idx, disc_out in enumerate(disc_output):
+            current_dict = {"features": disc_out[:-1], "score": disc_out[-1]}
+            output_dict[f"desc_{disc_idx}"] = current_dict
+        return output_dict 
+    
     def _loss(self, output: Dict[str, Any], *args, **kwargs):
-        real_d = output["real"]
-        fake_d = output["fake"]
+        real_d = self._process_disc_output(output["real"])
+        fake_d = self._process_disc_output(output["fake"])
         loss = 0.0
+        
         for (
             (_disc_name_r, disc_out_real),
             (_disc_name_f, disc_out_fake),

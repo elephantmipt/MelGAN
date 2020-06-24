@@ -14,7 +14,7 @@ model_params:
 stages:
   data_params:
     batch_size: 32
-    num_workers: 0
+    path: data/LJSpeech-1.1/wavs/
 
   state_params:
     main_metric: discriminator_loss
@@ -29,11 +29,11 @@ stages:
     optimizer_params:
       _key_value: True
       optimizer_generator:
-        optimizer: Radam
+        optimizer: RAdam
         lr: 0.001
         _model: generator
       optimizer_discriminator:
-        optimizer: Radam
+        optimizer: RAdam
         lr: 0.001
         _model: discriminator
 
@@ -50,3 +50,9 @@ stages:
         callback: OptimizerCallback
         metric_key: "discriminator_loss"
         optimizer_key: "optimizer_discriminator"
+      wandb:
+        callback: WandbLogger
+        config:
+          lr: 0.001
+          n_epochs: 120
+          batch_size: 32

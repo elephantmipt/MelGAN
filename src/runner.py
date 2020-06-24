@@ -10,9 +10,9 @@ class MelGANRunner(dl.Runner):
         model = utils.get_nn_from_ddp_module(self.model)
         generator = model["generator"]
         discriminator = model["discriminator"]
-
+        segment_length = self.loaders["train"].dataset.segment_length
         generated_audio = generator(batch["generator_mel"])[
-            :, :, : batch["generator_segment_len"]
+            :, :, : segment_length
         ]
         disc_fake = discriminator(generated_audio)  # probably slice here
         disc_real = discriminator(batch["generator_audio"])
@@ -20,7 +20,7 @@ class MelGANRunner(dl.Runner):
         self.output["generator"]["fake"] = disc_fake
         self.output["generator"]["real"] = disc_real
         generated_audio = generator(batch["discriminator_mel"])[
-            :, :, : batch["discriminator_segment_len"]
+            :, :, : segment_length
         ]
         generated_audio = generated_audio.detach()
         disc_fake = discriminator(generated_audio)  # probably slice here

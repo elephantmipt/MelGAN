@@ -73,14 +73,11 @@ class DiscriminatorBlock(nn.Module):
         """
         padded = self.layers["input_padding"](inp)
         features = padded
-        output_dict = {}
-        for key, layer in self.layers.items():
+        features_list = []
+        for _key, layer in self.layers.items():
             features = layer(features)
-            if "output" not in key:
-                output_dict[key + "_ouput"] = features
-
-        score = features
-        return {"features": output_dict, "score": score}
+            features_list.append(features)
+        return features_list
 
 
 class Discriminator(nn.Module):
@@ -120,8 +117,8 @@ class Discriminator(nn.Module):
         Returns:
             Dict with all discriminators output
         """
-        output_dict = {}
+        output = []
         for name, desc in self.discriminators.items():
-            output_dict[name + "_output"] = desc(inp)
+            output.append(desc(inp))
             inp = self.downsampler(inp)
-        return output_dict
+        return output

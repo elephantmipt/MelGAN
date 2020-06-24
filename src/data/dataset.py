@@ -102,5 +102,5 @@ class MelFromDisk(Dataset):
         return {
             "mel": mel,
             "audio": audio,
-            "segment_len": self.segment_length,
+            "segment_len": int(self.segment_length),  # @TODO remove
         }
