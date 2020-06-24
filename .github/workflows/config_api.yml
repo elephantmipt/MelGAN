@@ -1,0 +1,30 @@
+name: Notebook API
+on: [push]
+
+jobs:
+   test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          fetch-depth: 1
+
+      - name: Set up Python 3.7
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.7
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          conda install -c conda-forge librosa -y  # dirty hack here
+          pip install -r requirements/requirements.txt -r requirements/requirements-dev.txt
+          sudo apt-get install libsndfile1 -y
+      - name: Preprocess audio
+        run: |
+          export PYTHONPATH=$PYTHONPATH:.
+          python scripts/preprocess.py -d data/test
+      - name: Run tests
+        run: |
+          export PYTHONPATH=$PYTHONPATH:.
+          catalyst-dl run -C configs/test.yml --verbose

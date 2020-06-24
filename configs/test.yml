@@ -1,0 +1,54 @@
+args:
+  # where to look for __init__.py file
+  expdir: "src"
+  # store logs in this subfolder
+  baselogdir: "./logs/MelGAN"
+
+model_params:
+  _key_value: true
+  generator:
+    model: Generator
+  discriminator:
+    model: Discriminator
+
+stages:
+  data_params:
+    batch_size: 32
+    num_workers: 0
+    path: data/test
+
+  state_params:
+    main_metric: discriminator_loss
+    minimize_metric: False
+
+  optimizer_params:
+    _key_value: True
+    optimizer_generator:
+      optimizer: RAdam
+      lr: 0.001
+      _model: generator
+    optimizer_discriminator:
+      optimizer: RAdam
+      lr: 0.001
+      _model: discriminator
+  # stages
+  train:
+    runner_params:
+      check: True
+
+    stage_params:
+      valid_loader: train
+
+    callbacks_params:
+      generator_loss:
+        callback: GeneratorLossCallback
+      discriminator_loss:
+        callback: DiscriminatorLossCallback
+      opt_g:
+        callback: OptimizerCallback
+        metric_key: "generator_loss"
+        optimizer_key: "optimizer_generator"
+      opt_d:
+        callback: OptimizerCallback
+        metric_key: "discriminator_loss"
+        optimizer_key: "optimizer_discriminator"
