@@ -9,15 +9,15 @@ MAX_WAV_VALUE = 32768.0
 
 
 class GenerateAudioCallback(Callback):
-    def __init__(self, epochs: List[int] = None, mel_path: str = None, out_path: str = None):
+    def __init__(self, epochs: List[int] = None, mel_path: str = None, out_name: str = None):
         super().__init__(order=CallbackOrder.External)
         if epochs is None:
             epochs = [1, 10, 50, 100]
         self.epochs = epochs
         self.mel_path = mel_path or "data/LJSpeech-1.1/wavs/LJ001-0006.mel"
-        if out_path is None:
-            out_path = "./reconstructed"
-        self.out_path = out_path
+        if out_name is None:
+            out_name = "./reconstructed"
+        self.out_name = out_name
 
     def on_epoch_end(self, runner: "IRunner"):
         if runner.epoch in self.epochs:
@@ -35,5 +35,5 @@ class GenerateAudioCallback(Callback):
             audio = audio.clamp(min=-MAX_WAV_VALUE, max=MAX_WAV_VALUE - 1)
             audio = audio.short()
             audio = audio.cpu().detach().numpy()
-            out_path = self.out_path + f"/{runner.epoch}.wav"
+            out_path = self.out_name + f"_{runner.epoch}.wav"
             write(out_path, 22050, audio)
