@@ -40,6 +40,11 @@ stages:
       valid_loader: train
 
     callbacks_params:
+      audio:
+        callback: GenerateAudioCallback
+        mel_path: data/test/LJ001-0006.mel
+      shuffle_dataset:
+        callback: ShuffleDatasetCallback
       generator_loss:
         callback: GeneratorLossCallback
       discriminator_loss:

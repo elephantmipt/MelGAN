@@ -38,6 +38,8 @@ stages:
         _model: discriminator
 
     callbacks_params:
+      audio:
+        callback
       generator_loss:
         callback: GeneratorLossCallback
       discriminator_loss:
