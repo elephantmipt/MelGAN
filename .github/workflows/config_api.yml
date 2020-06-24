@@ -1,4 +1,4 @@
-name: Notebook API
+name: Config API
 on: [push]
 
 jobs:
