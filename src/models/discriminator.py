@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import List
 
 import torch
 from torch import nn
@@ -43,7 +43,7 @@ class DiscriminatorBlock(nn.Module):
                         current_feature_dim * downsampling_factor // 4, 256
                     ),
                 ),
-                nn.LeakyReLU(),
+                nn.LeakyReLU(0.2),
             )
             current_feature_dim *= downsampling_factor
 
@@ -64,7 +64,7 @@ class DiscriminatorBlock(nn.Module):
         )
         self.layers = layers
 
-    def forward(self, inp: torch.Tensor) -> Dict[str, torch.Tensor]:
+    def forward(self, inp: torch.Tensor) -> List[torch.Tensor]:
         """Froward method
         Args:
             inp: downsampled input
@@ -107,7 +107,7 @@ class Discriminator(nn.Module):
                 downsampling_factor=downsampling_factor,
             )
 
-    def forward(self, inp: torch.Tensor) -> Dict[str, Dict[str, torch.Tensor]]:
+    def forward(self, inp: torch.Tensor) -> List[List[torch.Tensor]]:
         """
         Forward method
 

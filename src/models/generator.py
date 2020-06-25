@@ -17,10 +17,10 @@ class ResidualBlock(nn.Module):
         self.shortcut = nn.Conv1d(dim, dim, kernel_size=1)
         # normal (not residual) connection
         self.layers = nn.Sequential(
-            nn.LeakyReLU(),
+            nn.LeakyReLU(0.2),
             nn.ReflectionPad1d(dilation),
             nn.Conv1d(dim, dim, kernel_size=3, dilation=dilation),
-            nn.LeakyReLU(),
+            nn.LeakyReLU(0.2),
             nn.Conv1d(dim, dim, kernel_size=1),
         )
 
@@ -69,7 +69,7 @@ class Generator(nn.Module):
             idx += 2
 
         layers[f"conv_layer_{idx}"] = nn.Sequential(
-            nn.LeakyReLU(),
+            nn.LeakyReLU(0.2),
             nn.ReflectionPad1d(3),
             nn.Conv1d(32, 1, kernel_size=7, stride=1),
             nn.Tanh(),
@@ -85,7 +85,7 @@ class Generator(nn.Module):
         Returns:
             generator output
         """
-        inp = (inp + 5.0) / 5.0 # roughly normalize spectrogram
+        inp = (inp + 5.0) / 5.0  # roughly normalize spectrogram
         for _name, layer in self.layers.items():
             inp = layer(inp)
         return inp

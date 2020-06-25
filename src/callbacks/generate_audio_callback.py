@@ -12,7 +12,7 @@ class GenerateAudioCallback(Callback):
     def __init__(self, epochs: List[int] = None, mel_path: str = None, out_name: str = None):
         super().__init__(order=CallbackOrder.External)
         if epochs is None:
-            epochs = [1, 10, 50, 100]
+            epochs = [i+1 for i in range(0, 200, 10)]
         self.epochs = epochs
         self.mel_path = mel_path or "data/LJSpeech-1.1/wavs/LJ001-0006.mel"
         if out_name is None:
@@ -28,7 +28,10 @@ class GenerateAudioCallback(Callback):
             zero = torch.full((1, 80, 10), -11.5129).to(mel.device)
             mel = torch.cat((mel, zero), dim=2)
             generator = get_nn_from_ddp_module(runner.model)["generator"]
-            audio = generator.forward(mel)
+            if torch.cuda.is_available():
+                mel.to("cuda")
+                mel = mel.type(torch.cuda.FloatTensor)
+            audio = generator.forward(mel).detach().cpu()
             audio = audio.squeeze()  # collapse all dimension except time axis
             audio = audio[:-(hop_length * 10)]
             audio = MAX_WAV_VALUE * audio
