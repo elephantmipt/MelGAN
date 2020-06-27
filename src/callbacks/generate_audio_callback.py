@@ -10,7 +10,7 @@ MAX_WAV_VALUE = 32768.0
 
 class GenerateAudioCallback(Callback):
     def __init__(self, epochs: List[int] = None, mel_path: str = None, out_name: str = None):
-        super().__init__(order=CallbackOrder.External)
+        super().__init__(order=CallbackOrder.Internal)  # to set commit=False in wandb
         if epochs is None:
             epochs = [i + 1 for i in range(0, 200, 10)]
         self.epochs = epochs
@@ -40,7 +40,7 @@ class GenerateAudioCallback(Callback):
             audio = audio.cpu().detach().numpy()
             try:
                 import wandb
-                wandb.log({f"_{runner.epoch}.wav": [wandb.Audio(audio, caption=self.mel_path, sample_rate=22050)]})
+                wandb.log({f"generated.wav": [wandb.Audio(audio, caption=self.mel_path, sample_rate=22050)]}, step=runner.epoch)
             except:
                 Warning("can't import wandb")
             out_path = self.out_name + f"_{runner.epoch}.wav"
