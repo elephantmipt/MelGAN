@@ -40,9 +40,8 @@ class GenerateAudioCallback(Callback):
             audio = audio.cpu().detach().numpy()
             try:
                 import wandb
-                wandb.log({"examples": [wandb.Audio(audio, caption="Nice", sample_rate=22050)]})
+                wandb.log({f"_{runner.epoch}.wav": [wandb.Audio(audio, caption=self.mel_path, sample_rate=22050)]})
             except:
-                Warning("Can't import wandb")
-
+                Warning("can't import wandb")
             out_path = self.out_name + f"_{runner.epoch}.wav"
             write(out_path, 22050, audio)
