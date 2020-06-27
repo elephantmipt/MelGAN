@@ -24,7 +24,7 @@ class DiscriminatorBlock(nn.Module):
         layers = nn.ModuleDict()  # to prevent alphabetic order
         layers["input_padding"] = nn.ReflectionPad1d(padding=7)
         layers["conv_layer_0"] = nn.Sequential(
-            nn.Conv1d(in_channels=1, out_channels=features, kernel_size=15,),
+            nn.utils.weight_norm(nn.Conv1d(in_channels=1, out_channels=features, kernel_size=15,)),
             nn.LeakyReLU(),
         )
         kernel_size = downsampling_factor * 10 + 1
@@ -32,7 +32,7 @@ class DiscriminatorBlock(nn.Module):
         for layer_idx in range(1, downsampling_layers_num + 1):
 
             layers[f"downsampling_layer_{layer_idx}"] = nn.Sequential(
-                nn.Conv1d(
+                nn.utils.weight_norm(nn.Conv1d(
                     in_channels=min(current_feature_dim, 1024),
                     out_channels=min(
                         current_feature_dim * downsampling_factor, 1024
@@ -42,26 +42,26 @@ class DiscriminatorBlock(nn.Module):
                     groups=min(
                         current_feature_dim * downsampling_factor // 4, 256
                     ),
-                ),
+                )),
                 nn.LeakyReLU(0.2),
             )
             current_feature_dim *= downsampling_factor
 
         layers[f"conv_layer_{downsampling_layers_num+1}"] = nn.Sequential(
-            nn.Conv1d(
+            nn.utils.weight_norm(nn.Conv1d(
                 in_channels=min(current_feature_dim, 1024),
                 out_channels=min(current_feature_dim * 2, 1024),
                 kernel_size=5,
                 padding=2,
-            ),
+            )),
             nn.ReLU(),
         )
-        layers["output_layer"] = nn.Conv1d(
+        layers["output_layer"] = nn.utils.weight_norm(nn.Conv1d(
             in_channels=min(current_feature_dim * 2, 1024),
             out_channels=1,
             kernel_size=3,
             padding=1,
-        )
+        ))
         self.layers = layers
 
     def forward(self, inp: torch.Tensor) -> List[torch.Tensor]:

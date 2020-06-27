@@ -14,14 +14,14 @@ class ResidualBlock(nn.Module):
         super().__init__()
         # nothing about it in paper,
         # but in official repo they do residual connection like this
-        self.shortcut = nn.Conv1d(dim, dim, kernel_size=1)
+        self.shortcut = nn.utils.weight_norm(nn.Conv1d(dim, dim, kernel_size=1))
         # normal (not residual) connection
         self.layers = nn.Sequential(
             nn.LeakyReLU(0.2),
             nn.ReflectionPad1d(dilation),
-            nn.Conv1d(dim, dim, kernel_size=3, dilation=dilation),
+            nn.utils.weight_norm(nn.Conv1d(dim, dim, kernel_size=3, dilation=dilation)),
             nn.LeakyReLU(0.2),
-            nn.Conv1d(dim, dim, kernel_size=1),
+            nn.utils.weight_norm(nn.Conv1d(dim, dim, kernel_size=1)),
         )
 
     def forward(self, inp: torch.Tensor) -> torch.Tensor:
@@ -50,18 +50,18 @@ class Generator(nn.Module):
         strides = [8, 8, 2, 2]
         layers = nn.ModuleDict()
         layers["padding"] = nn.ReflectionPad1d(3)
-        layers["conv_layer_0"] = nn.Conv1d(inp_channels, 512, kernel_size=7)
+        layers["conv_layer_0"] = nn.utils.weight_norm(nn.Conv1d(inp_channels, 512, kernel_size=7))
         idx = 1
         for inp_ch, st in zip(input_channels, strides):
             layers[f"conv_transpose_{idx}"] = nn.Sequential(
                 nn.LeakyReLU(),
-                nn.ConvTranspose1d(
+                nn.utils.weight_norm(nn.ConvTranspose1d(
                     inp_ch,
                     inp_ch // 2,
                     kernel_size=st * 2,
                     stride=st,
                     padding=st // 2,
-                ),
+                )),
             )
             layers[f"res_block_{idx+1}"] = ResidualBlock(inp_ch // 2)
             if self.normalization:
@@ -71,7 +71,7 @@ class Generator(nn.Module):
         layers[f"conv_layer_{idx}"] = nn.Sequential(
             nn.LeakyReLU(0.2),
             nn.ReflectionPad1d(3),
-            nn.Conv1d(32, 1, kernel_size=7, stride=1),
+            nn.utils.weight_norm(nn.Conv1d(32, 1, kernel_size=7, stride=1)),
             nn.Tanh(),
         )
         self.layers = layers
