@@ -1,5 +1,7 @@
 # Getting started
 
+This project is about MelGAN, proposed in this [paper](https://arxiv.org/abs/1910.06711).
+
 ### Quick start
 
 If you want run script and don't care you can run this commands in your terminal:
