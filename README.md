@@ -1,6 +1,20 @@
 # Getting started
 
-## Getting started
+### Quick start
+
+If you want run script and don't care you can run this commands in your terminal:
+
+```bash
+git clone https://github.com/PUSSYMIPT/MelGAN.git && cd MelGAN
+pip install -r requirements/requirements.txt
+sudo apt-get install libsndfile1 -y  # not necessary but sometimes required
+bash bin/download_lj_speech.sh
+export PYTHINPATH=$PYTHONPATH:.  # not necessary but sometimes required
+python scripts/preprocess.py -d data/LJSpeech-1.1/wavs
+catalyst-dl run -C configs/LJ_config.yml --verbose
+```
+
+## Run experiment
 
 First of all we need to install all required dependencies
 
@@ -16,7 +30,7 @@ $ sudo apt-get install libsndfile1 -y
 
 ### Config API
 
-The most product-ready and kinda professional way to run script in catalyst is to run it via config API. You need to write your config.yml file and download your dataset. Then just run 
+The most product-ready and kinda professional way to run script in catalyst is to run it via config API. You need to write your `config.yml` file and download your dataset. Then just run 
 
 ```bash
 $ catalyst-dl run -C PATH_TO_CONFIG
