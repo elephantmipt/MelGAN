@@ -1,6 +1,6 @@
 # Paper Overview
 
-## The key idea
+## Main idea
 
 The key idea of this paper is to improve speed of generating waveform from spectrogram. Authors use GAN with CNN-only architecture which is optimized for GPU. Both generator and discriminator is very lightweight in comparison to previous SOTA approaches like wave net.
 
@@ -29,6 +29,6 @@ $$
 $$
 
 $$
-\lambda = \dfrac{10}{k}
+\lambda = \dfrac{10}{N_D}
 $$
 
