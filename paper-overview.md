@@ -29,6 +29,6 @@ $$
 $$
 
 $$
-\lambda = \dfrac{10}{N_D}
+\lambda = \dfrac{10}{k}
 $$
 
