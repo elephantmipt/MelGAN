@@ -1,0 +1,65 @@
+args:
+  # where to look for __init__.py file
+  expdir: "src"
+  # store logs in this subfolder
+  baselogdir: "./logs/MelGAN"
+
+model_params:
+  _key_value: true
+  generator:
+    model: Generator
+  discriminator:
+    model: Discriminator
+
+stages:
+  data_params:
+    batch_size: 32
+    path: data/LJSpeech-1.1/wavs/
+
+  state_params:
+    main_metric: discriminator_loss
+
+  # stages
+  train:
+    state_params:
+      num_epochs: 800
+      valid_loader: train
+
+    optimizer_params:
+      _key_value: True
+      optimizer_generator:
+        optimizer: RAdam
+        lr: 0.0001
+        betas:
+          - 0.5
+          - 0.9
+        _model: generator
+      optimizer_discriminator:
+        optimizer: RAdam
+        betas:
+          - 0.5
+          - 0.9
+        lr: 0.0001
+        _model: discriminator
+
+    callbacks_params:
+      audio:
+        callback
+      generator_loss:
+        callback: GeneratorLossCallback
+      discriminator_loss:
+        callback: DiscriminatorLossCallback
+      opt_g:
+        callback: OptimizerCallback
+        metric_key: "generator_loss"
+        optimizer_key: "optimizer_generator"
+      opt_d:
+        callback: OptimizerCallback
+        metric_key: "discriminator_loss"
+        optimizer_key: "optimizer_discriminator"
+      wandb:
+        callback: WandbLogger
+        config:
+          lr: 0.0001
+          n_epochs: 800
+          batch_size: 16

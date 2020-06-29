@@ -246,7 +246,7 @@ class TacotronSTFT(torch.nn.Module):
         n_mel_channels=80,
         sampling_rate=22050,
         mel_fmin=0.0,
-        mel_fmax=None,
+        mel_fmax=8000,
     ):
         super(TacotronSTFT, self).__init__()
         self.n_mel_channels = n_mel_channels
