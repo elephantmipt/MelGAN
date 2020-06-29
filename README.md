@@ -1,4 +1,4 @@
-# Getting started
+# MelGAN
 
 This project is about MelGAN, proposed in this [paper](https://arxiv.org/abs/1910.06711).
 
