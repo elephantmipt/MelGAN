@@ -11,7 +11,8 @@ git clone https://github.com/PUSSYMIPT/MelGAN.git && cd MelGAN
 pip install -r requirements/requirements.txt
 sudo apt-get install libsndfile1 -y  # not necessary but sometimes required
 bash bin/download_lj_speech.sh
-export PYTHINPATH=$PYTHONPATH:.  # not necessary but sometimes required
+export PYTHONPATH=$PYTHONPATH:.  # not necessary but sometimes required
+bash bin/download_lj_speach.sh
 python scripts/preprocess.py -d data/LJSpeech-1.1/wavs
 catalyst-dl run -C configs/LJ_config.yml --verbose
 ```
