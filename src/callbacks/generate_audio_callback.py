@@ -9,18 +9,16 @@ MAX_WAV_VALUE = 32768.0
 
 
 class GenerateAudioCallback(Callback):
-    def __init__(self, epochs: List[int] = None, mel_path: str = None, out_name: str = None):
+    def __init__(self, period: int = 10, mel_path: str = None, out_name: str = None):
         super().__init__(order=CallbackOrder.Internal)  # to set commit=False in wandb
-        if epochs is None:
-            epochs = [i + 1 for i in range(0, 200, 10)]
-        self.epochs = epochs
+        self.period = period
         self.mel_path = mel_path or "data/LJSpeech-1.1/wavs/LJ001-0006.mel"
         if out_name is None:
             out_name = "./reconstructed"
         self.out_name = out_name
 
     def on_epoch_end(self, runner: "IRunner"):
-        if runner.epoch in self.epochs:
+        if (runner.epoch - 1) % 10 == 0:
             mel = torch.load(self.mel_path)
             hop_length = 256
             # pad input mel with zeros to cut artifact
