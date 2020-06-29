@@ -21,11 +21,11 @@ class DiscriminatorBlock(nn.Module):
             downsampling_factor: downsampling factor
         """
         super().__init__()
-        layers = nn.ModuleDict()  # to prevent alphabetic order
+        layers = nn.ModuleDict()
         layers["input_padding"] = nn.ReflectionPad1d(padding=7)
         layers["conv_layer_0"] = nn.Sequential(
             nn.utils.weight_norm(nn.Conv1d(in_channels=1, out_channels=features, kernel_size=15,)),
-            nn.LeakyReLU(),
+            nn.LeakyReLU(0.2, inplace=True),
         )
         kernel_size = downsampling_factor * 10 + 1
         current_feature_dim = features
@@ -43,7 +43,7 @@ class DiscriminatorBlock(nn.Module):
                         current_feature_dim * downsampling_factor // 4, 256
                     ),
                 )),
-                nn.LeakyReLU(0.2),
+                nn.LeakyReLU(0.2, inplace=True),
             )
             current_feature_dim *= downsampling_factor
 
