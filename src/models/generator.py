@@ -37,7 +37,7 @@ class ResidualBlock(nn.Module):
 
 
 class Generator(nn.Module):
-    def __init__(self, inp_channels: int = 80, normalization: bool = True):
+    def __init__(self, inp_channels: int = 80, normalization: bool = False):
         """
         @TODO
         Args:
@@ -63,9 +63,8 @@ class Generator(nn.Module):
                     padding=st // 2,
                 )),
             )
-            layers[f"res_block_{idx+1}"] = ResidualBlock(inp_ch // 2)
-            if self.normalization:
-                layers[f"batch_norm_{idx+1}"] = nn.BatchNorm1d(inp_ch // 2)
+            for i in range(3):
+                layers[f"res_block_{idx+1}"] = ResidualBlock(inp_ch // 2, dilation=3 ** i)
             idx += 2
 
         layers[f"conv_layer_{idx}"] = nn.Sequential(
