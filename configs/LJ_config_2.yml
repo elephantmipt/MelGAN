@@ -44,7 +44,7 @@ stages:
 
     callbacks_params:
       audio:
-        callback
+        callback: GenerateAudioCallback
       generator_loss:
         callback: GeneratorLossCallback
       discriminator_loss:
