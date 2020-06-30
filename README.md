@@ -31,6 +31,15 @@ Sometimes if `librosa` wasn't install we also need to install some other additio
 $ sudo apt-get install libsndfile1 -y
 ```
 
+Also we need to download and preprocess dataset. For example LJ1.1.
+
+```bash
+bash bin/download_lj_speech.sh
+export PYTHONPATH=$PYTHONPATH:.  # not necessary but sometimes required
+bash bin/download_lj_speach.sh
+python scripts/preprocess.py -d data/LJSpeech-1.1/wavs
+```
+
 ### Config API
 
 The most product-ready and kinda professional way to run script in catalyst is to run it via config API. You need to write your `config.yml` file and download your dataset. Then just run 
