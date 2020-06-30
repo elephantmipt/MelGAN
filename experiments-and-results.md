@@ -34,7 +34,7 @@ If I use learning rate $$0.0001$$ situation becomes different. Now discriminator
 
 {% file src=".gitbook/assets/lj001-0006 \(1\).wav" caption="Original" %}
 
-The problem I noticed is that there is no gradients in some layers there is no gradients at all.
+The problem I noticed is that there is no gradients in some layers there is no gradients at all in first epochs. Maybe because discriminator can't handle generator at first.
 
 ![](.gitbook/assets/snimok-ekrana-2020-06-30-v-10.39.15.png)
 
