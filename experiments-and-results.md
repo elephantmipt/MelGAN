@@ -6,8 +6,6 @@ All logs can be found [here](https://app.wandb.ai/torchwave/MelGAN).
 
 Mainly all I tried is to remove some residual stacks and use one instead of three stacks in downsampling layer of generator. This leads to faster training but affects on quality, especially when there is a phrase instead of one separate word in text. Here is an examples of this approach \(there is underfiting but main idea is clear\).
 
-#### Generated audio
-
 {% file src=".gitbook/assets/reconstructed\_51.wav\_51\_8e773bfd.wav" caption="50 epochs" %}
 
 {% file src=".gitbook/assets/reconstructed\_101.wav\_101\_21edde86.wav" caption="100 epochs" %}
@@ -31,6 +29,8 @@ If I use learning rate $$0.0001$$ situation becomes different. Now discriminator
 {% file src=".gitbook/assets/generated\_101.wav\_101\_2e340efb.wav" caption="100 epochs" %}
 
 {% file src=".gitbook/assets/generated\_201.wav\_201\_2ffda111.wav" caption="200 epochs" %}
+
+{% file src=".gitbook/assets/generated\_381.wav\_381\_e2850806.wav" caption="380 epochs" %}
 
 {% file src=".gitbook/assets/lj001-0006 \(1\).wav" caption="Original" %}
 
