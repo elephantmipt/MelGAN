@@ -1,4 +1,4 @@
-torch==1.5.0
+torch==2.2.0
 catalyst==20.6
 numba==0.48
 librosa
